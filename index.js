@@ -1,18 +1,11 @@
-const _ = require('lodash');
-
-const mergeDefaults = (objectValue, sourceValue) => {
-    // Do not merge arrays.
-    if (_.isArray(sourceValue)) {
-        return sourceValue;
-    }
-};
-
+"use strict";
+const _ = require("lodash");
 module.exports = function () {
-    var args = _.toArray(arguments).reverse();
-
     let output = {};
-    args.forEach(item=> {
-        _.mergeWith(output, item, mergeDefaults);
+    _.toArray(arguments).reverse().forEach(item=> {
+        _.mergeWith(output, item, (objectValue, sourceValue) => {
+            return _.isArray(sourceValue) ? sourceValue : undefined;
+        });
     });
     return output;
 };

@@ -1,107 +1,48 @@
-# defaults-deep-safe
+# defaults-deep-preserve-arrays
 
-A deep version of `_.defaults(object, [sources])`, safe by default by deep cloning each `source`. Arrays are not merged.
+Similar to lodash's defaultsDeep, but without mutating the source object, and no merging of arrays
 
-## Status
-
-[![npm version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
 
 ## Installation
 
 Install the package via `npm`:
 
 ```
-$ npm install defaults-deep-safe
+$ npm install defaults-deep-preserve-arrays
 ```
 
 ## Usage
 
 #### Arguments
-1. `object` *(Object)*: The destination object.
-2. `[source]` *(...Object)*: The source objects.
+2. `[sources]` *(...Object)*: The source objects. Provide 2 or more, in descending order of importance
 
 #### Returns
-*(Object)*: Returns the destination object.
+*(Object)*: Returns the merged objects
 
 #### Example
 ```js
-var defaultsDeep = require('defaults-deep-safe');
+var defaultsDeep = require('defaults-deep-preserve-arrays');
 
-var object = { foo: 'bar', bar: { biz: { net: 'qux' } }, qux: ['biz'] };
-var source = { bar: { biz: { net: 'txi', qox: 'fuc' } }, qux: ['baz'] };
+var objectA = { bar: { biz: { net: 'txi', qox: 'fuc' } }, qux: ['baz'] };
+var objectB = { bar: { biz: { net: 'qux'} }, qux: ['biz', 'ban'] };
+var objectC = { bar: { biz: { net: 'qux', lee: 'sox' } }, qux: ['biz', 'rep'], foo: 'bar' };
 
-defaultsDeep(object, source);
-// => { foo: 'bar', bar: { biz: { net: 'qux', qox: 'fuc' } }, qux: ['biz'] }
+defaultsDeep(objectA, objectB, objectC);
+// => { bar: { biz: { net: 'qux', qox: 'fuc', lee: 'sox' } }, qux: ['baz'], foo: 'bar' }
 ```
 
-Or as a lodash `mixin`:
-
+###How
+Incredibly simple:
 ```js
-var _ = require('lodash');
-
-_.mixin({
-  defaultsDeep: require('defaults-deep-safe')
-});
-
-_.defaultsDeep(object, [sources]);
+"use strict";
+const _ = require("lodash");
+module.exports = function () {
+    let output = {};
+    _.toArray(arguments).reverse().forEach(item=> {
+        _.mergeWith(output, item, (objectValue, sourceValue) => {
+            return _.isArray(sourceValue) ? sourceValue : undefined;
+        });
+    });
+    return output;
+};
 ```
-
-## Motivation
-
-This module is perfect for merging config/settings files and to safely handle options by avoiding changing objects by reference.
-
-Here's a quick example demonstrating why using `_.defaults` may not be a safe operation:
-
-```js
-var foo = { a: 1, c: 2 };
-var bar = { b: new Date(), d: { e: 'f' } };
-
-var result = require('lodash').defaults(foo, bar);
-
-require('assert')(bar.b === result.b);
-// => true
-
-require('assert')(bar.d === result.d);
-// => true
-
-result.d.g = 'h';
-
-console.log(bar.d);
-// => { e: 'f', g: 'h' }
-```
-
-Using `defaults-deep-safe`:
-
-```js
-var foo = { a: 1, c: 2 };
-var bar = { b: new Date(), d: { e: 'f' } };
-
-var result = require('lodash').defaults(foo, bar);
-
-require('assert')(bar.b === result.b);
-// => AssertionError: false == true
-
-require('assert')(bar.d === result.d);
-// => AssertionError: false == true
-
-result.d.g = 'h';
-
-console.log(bar.d);
-// => { e: 'f' }
-```
-
-## Tests
-
-```
-$ npm test
-```
-
-## License
-
-MIT
-
-[npm-image]: https://img.shields.io/npm/v/defaults-deep-safe.svg
-[npm-url]: https://npmjs.org/package/defaults-deep-safe
-[travis-image]: https://travis-ci.org/seegno/defaults-deep-safe.svg
-[travis-url]: https://travis-ci.org/seegno/defaults-deep-safe
