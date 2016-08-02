@@ -1,43 +1,42 @@
 {
-  "name": "defaults-deep-safe",
-  "version": "0.0.1",
+  "name": "defaults-deep-preserve-arrays",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/seegno/defaults-deep-safe.git"
+    "url": "https://github.com/drewdotpro/defaults-deep-preserve-arrays.git"
   },
-  "description": "A deep version of _.defaults, safe by default.",
+  "description": "_.defaultsDeep without array merging",
   "keywords": [
     "_",
-    "_.defaults",
+    "_.defaultsDeep",
     "clone",
     "deep",
     "defaults",
     "lodash",
-    "merge"
+    "merge",
+    "arrays"
   ],
   "author": {
-    "name": "Rui Marinho",
-    "email": "rui.marinho@seegno.com",
-    "url": "https://seegno.com"
+    "name": "Drew Llewellyn",
+    "email": "drew@drew.pro",
+    "url": "http://drew.pro"
   },
-  "homepage": "https://github.com/seegno/defaults-deep-safe",
+  "homepage": "https://github.com/drewdotpro/defaults-deep-preserve-arrays",
   "bugs": {
-    "url": "https://github.com/seegno/defaults-deep-safe/issues"
+    "url": "https://github.com/drewdotpro/defaults-deep-preserve-arrays/issues"
   },
   "license": "MIT",
   "scripts": {
-    "changelog": "./node_modules/.bin/github-changes -o seegno -r defaults-deep-safe -a --only-pulls --use-commit-body --title 'Changelog' --date-format '/ YYYY-MM-DD'",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha test/*_test.js --require should --reporter spec"
   },
   "dependencies": {
-    "lodash": "^3.1.0"
+    "lodash": "^4.14.1"
   },
   "devDependencies": {
-    "github-changes": "0.0.16",
-    "mocha": "^2.0.1",
-    "should": "^4.2.1"
+    "mocha": "^3.0.0",
+    "should": "^10.0.0"
   },
   "engines": {
-    "node": ">= 0.10"
+    "node": ">= 6.0"
   }
 }

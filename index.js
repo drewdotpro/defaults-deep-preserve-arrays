@@ -1,33 +1,18 @@
+const _ = require('lodash');
 
-/**
- * Module dependencies.
- */
+const mergeDefaults = (objectValue, sourceValue) => {
+    // Do not merge arrays.
+    if (_.isArray(sourceValue)) {
+        return sourceValue;
+    }
+};
 
-var _ = require('lodash');
+module.exports = function () {
+    var args = _.toArray(arguments).reverse();
 
-/**
- * Merge defaults.
- */
-
-function mergeDefaults(objectValue, sourceValue) {
-  // Do not merge arrays.
-  if (_.isArray(objectValue)) {
-    return objectValue;
-  }
-
-  if (_.isPlainObject(sourceValue)) {
-    return _.merge(objectValue, sourceValue, mergeDefaults);
-  }
-
-  return _.defaults(objectValue, sourceValue);
-}
-
-/**
- * Export `defaultsDeep`.
- */
-
-module.exports = function() {
-  var args = _.toArray(arguments);
-
-  return _.merge.apply(null, _.initial(args).concat(_.rest(args).map(_.cloneDeep)).concat(mergeDefaults));
+    let output = {};
+    args.forEach(item=> {
+        _.mergeWith(output, item, mergeDefaults);
+    });
+    return output;
 };
