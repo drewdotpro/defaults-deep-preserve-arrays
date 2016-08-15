@@ -1,5 +1,7 @@
 # defaults-deep-preserve-arrays
 
+This repo is deprecated. Please use [@nodeutils/defaults-deep](https://www.npmjs.com/package/@nodeutils/defaults-deep)
+
 Similar to lodash's defaultsDeep, but without mutating the source object, and no merging of arrays
 
 
